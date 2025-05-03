@@ -6,7 +6,7 @@ class Env
 
   public function __construct()
   {
-    $this->env = parse_ini_file('../../.env');
+    $this->env = parse_ini_file(__DIR__ . '../../../.env');
   }
 
   public function get($key)

@@ -1,8 +1,9 @@
 <?php
 
-require_once '../services/env.php';
+require_once __DIR__ . '../../databaseConnectionInterface.php';
+require_once __DIR__ . '../../env.php';
 
-class Conexion
+class MySQLDatabaseConnection implements DatabaseConnectionInterface
 {
   private $host;
   private $dbname;
@@ -18,7 +19,7 @@ class Conexion
     $this->dbname = $env->get('DB_NAME');
   }
 
-  public function conectar()
+  public function connect()
   {
     try {
       $conn = new mysqli($this->host, $this->username, $this->password, $this->dbname);
@@ -31,5 +32,19 @@ class Conexion
       echo "Error en la conexion" . $th->getMessage();
       exit;
     }
+  }
+
+  public function query($query)
+  {
+    $conn = $this->connect();
+    $result = $conn->query($query);
+    $conn->close();
+
+    return $result;
+  }
+
+  public function close()
+  {
+    // No es necesario por el momento
   }
 }
