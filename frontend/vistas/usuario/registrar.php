@@ -1,15 +1,28 @@
 <?php
 
-require_once __DIR__ . '../../../../backend/DAOS/usuarioDAO.php';
-require_once __DIR__ . '../../../../backend/modelos/usuario/usuario.php';
+require_once __DIR__ . '../../../../backend/controladores/usuarioController.php';
 
-if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
-  $usuarioDao = new UsuarioDAO();
-  $usuario = new Usuario(null, $_POST['username'], $_POST['email'], $_POST['password'], 2);
-  if ($usuarioDao->crearUsuario($usuario)) {
-    header('Location: ../../../index.php');
+$mensaje = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $username = trim($_POST['username']);
+  $email = trim($_POST['email']);
+  $password = $_POST['password'];
+  $rol_id = 1; // 1 para admin, 2 para usuario
+
+  if (!empty($username) && !empty($email) && !empty($password)) {
+    $token = bin2hex(random_bytes(32));
+    $controller = new UsuarioController();
+    $registrado = $controller->registrarUsuario($username, $email, $password, $rol_id, $token);
+
+    if ($registrado) {
+      $mensaje = "Registro exitoso";
+      header('Location: ../../../index.php');
+    } else {
+      $mensaje = "El usuario o el correo ya están registrados.";
+    }
   } else {
-    $error = 'Error al registrar el usuario';
+    $mensaje = "Todos los campos son obligatorios.";
   }
 }
 
@@ -28,7 +41,7 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
 <body>
   <div class="wrapper">
     <div class="title">Registrar usuario</div>
-    <form action="registrar.php" method="POST">
+    <form method="POST">
       <div class="field">
         <input type="text" id="username" name="username" required>
         <label for="username">Nombre de usuario</label>
@@ -42,12 +55,12 @@ if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['passwor
         <label for="password">Contraseña</label>
       </div>
       <div class="field">
-        <input type="submit" value="Registrar">
+        <button type="submit" class="botonIniciar">Registrarse</button>
       </div>
-      <?php if (isset($error)) echo "<p style='color: red'>$error</p>"; ?>
       <div class="signup-link">
         <a href="../index.php">Iniciar sesión</a>
       </div>
+      <?php if (!empty($mensaje)) echo "<p>$mensaje</p>"; ?>
     </form>
   </div>
 </body>

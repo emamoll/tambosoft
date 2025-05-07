@@ -26,11 +26,9 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['rol_id'])) {
   <div class="btn-menu">
       <label for="btn-menu" class="icon-menu">☰</label>
     </div>
-    <a href="../../../index.php" class="logoIndex"><img src="../../img/logoChico.png" alt="Logo Tambosoft" class="logo" /></a>
+    <a href="usuarioHome.php" class="logoIndex"><img src="../../img/logoChico.png" alt="Logo Tambosoft" class="logo" /></a>
     <nav>
       <ul class="flex">
-        <li class="flex5"><h4><?php echo $_SESSION['username'] ?></h4></li>
-        <li class="flex5"><a href="cerrarSesion.php">Cerrar sesión</a></li>
       </ul>
     </nav>
   </header>
@@ -40,13 +38,15 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['rol_id'])) {
   <div class="container-menu">
     <div class="cont-menu">
       <nav>
-        <p class="primerItem"></p>
+        <p class="primerItem"></p></br></br></br></br>
+        <a href="cerrarSesion.php">Cerrar sesión</a>
         <!-- <a href="#">Animales</a>
         <a href="#">Alimentos</a> -->
       </nav>
       <!-- <label for="btn-menu">X</label> -->
     </div>
   </div>
+  <h1 class="mensajeBienvenida">Bienvenido <?php echo $_SESSION['username'] ?></h1>
 </body>
 
 </html>

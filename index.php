@@ -1,25 +1,48 @@
 <?php
 
 session_start();
-require_once __DIR__ . '../backend/DAOS/usuarioDAO.php';
+require_once __DIR__ . '../backend/controladores/usuarioController.php';
 
-if (isset($_POST['username']) && isset($_POST['password'])) {
-  $usuarioDao = new UsuarioDAO();
-  $usuario = $usuarioDao->getUsuarioByUsername($_POST['username']);
-  if ($usuario && password_verify($_POST['password'], $usuario->getPassword())) {
-    $_SESSION['username'] = $usuario->getUsername();
-    $_SESSION['rol_id'] = $usuario->getRol_id();
-    if($usuario->getRol_id() == 1){
+$mensaje = "";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $username = trim($_POST['username'] ?? '');
+  $password = trim($_POST['password'] ?? '');
+  $controller = new UsuarioController();
+  $usuario = $controller->loginUsuario($_POST['username'], $_POST['password']);
+
+  if ($usuario) {
+    $_SESSION['token'] = $usuario->getToken();
+
+    if ($usuario->getRol_id() == 1) {
       header('Location: frontend/vistas/usuario/adminHome.php');
-    }elseif($usuario->getRol_id() == 2){
+    } else {
       header('Location: frontend/vistas/usuario/usuarioHome.php');
-    }else{
-      echo ("Usted no esta autorizado");
     }
+    exit;
   } else {
-    $error = "Usuario y/o contraseña incorrectos";
+    $mensaje = "Usuario o contraseña incorrectos.";
   }
 }
+
+
+// if (isset($_POST['username']) && isset($_POST['password'])) {
+//   $usuarioDao = new UsuarioDAO();
+//   $usuario = $usuarioDao->getUsuarioByUsername($_POST['username']);
+//   if ($usuario && password_verify($_POST['password'], $usuario->getPassword())) {
+//     $_SESSION['username'] = $usuario->getUsername();
+//     $_SESSION['rol_id'] = $usuario->getRol_id();
+//     if($usuario->getRol_id() == 1){
+//       header('Location: frontend/vistas/usuario/adminHome.php');
+//     }elseif($usuario->getRol_id() == 2){
+//       header('Location: frontend/vistas/usuario/usuarioHome.php');
+//     }else{
+//       echo ("Usted no esta autorizado");
+//     }
+//   } else {
+//     $error = "Usuario y/o contraseña incorrectos";
+//   }
+// }
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +63,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     </div>
     <div class="wrapper divCentral">
       <div class="title">Inicia sesion</div>
-      <form action="index.php" method="POST">
+      <form method="POST">
         <div class="field">
           <input type="text" required name="username" id="username">
           <label>Usuario</label>
@@ -57,14 +80,10 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 <div class="pass-link"><a href="#">Olvide mi contraseña</a></div>
             </div> -->
         <br>
-        <?php
-        if (isset($error)) {
-          echo "<p style='color:red'> $error </p>";
-        }
-        ?>
         <div class="field">
-          <input type="submit" value="Iniciar sesión">
+          <button type="submit" class="botonIniciar">Iniciar sesión</button>
         </div>
+        <?php if (!empty($mensaje)) echo "<p>$mensaje</p>"; ?>
       </form>
     </div>
   </div>

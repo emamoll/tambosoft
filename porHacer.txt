@@ -1,0 +1,3 @@
+- Crear un token para validar sesion
+- Separar el modelo de rol y de usuario
+- Crear los controladores
