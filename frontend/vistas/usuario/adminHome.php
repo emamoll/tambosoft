@@ -55,6 +55,7 @@ if ($usuario->getRol_id() != 1) {
     <div class="cont-menu">
       <nav>
         <a href="../campo/campo.php" class="primerItem">Campos</a>
+        <a href="../potrero/potrero.php">Potreros</a>
         <a href="#">Animales</a>
         <a href="#">Alimentos</a>
         <a href="../usuario/registrar.php">Usuarios</a></br></br></br></br>

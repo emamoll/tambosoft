@@ -57,16 +57,17 @@ class campoDAO
     $sql = "SELECT * FROM campos WHERE nombre = ?";
     $stmt = $this->conn->prepare($sql);
     $stmt->bind_param("s", $nombre);
-    $result = $stmt->get_result();
+    $stmt->execute();
+    $stmt->store_result();
 
-    if (!$result) {
-      die("Error en la consulta: " . $this->conn->error);
+    if ($stmt->num_rows === 0) {
+      return null;
     }
 
-    if ($row = $result->fetch_assoc()) {
-      return new Campo($row['id'], $row['nombre'], $row['ubicacion']);
-    }
-    return null;
+    $stmt->bind_result($id, $nombre, $ubicacion);
+    $stmt->fetch();
+
+    return new Campo($id, $nombre, $ubicacion);
   }
 
   public function registrarCampo(Campo $c)

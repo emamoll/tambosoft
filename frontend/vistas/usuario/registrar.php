@@ -38,8 +38,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-<body>
-  <div class="wrapper">
+<body class="bodyHome">
+  <header class="bordeH">
+    <div class="btn-menu">
+      <label for="btn-menu" class="icon-menu">☰</label>
+    </div>
+    <a href="adminHome.php" class="logoIndex"><img src="../../img/logoChico.png" alt="Logo Tambosoft" class="logo" /></a>
+    <nav>
+      <ul class="flex">
+      </ul>
+    </nav>
+  </header>
+  <div class="capa"></div>
+  <!--	--------------->
+  <input type="checkbox" id="btn-menu" />
+  <div class="container-menu">
+    <div class="cont-menu">
+      <nav>
+        <a href="../campo/campo.php" class="primerItem">Campos</a>
+        <a href="../potrero/potrero.php">Potreros</a>
+        <a href="#">Animales</a>
+        <a href="#">Alimentos</a>
+        <a href="registrar.php">Usuarios</a></br></br></br></br>
+        <a href="cerrarSesion.php">Cerrar sesión</a>
+
+      </nav>
+      <!-- <label for="btn-menu">X</label> -->
+    </div>
+  </div>
+
+  <div class="wrapper seccionFormularios">
     <div class="title">Registrar usuario</div>
     <form method="POST">
       <div class="field">
@@ -56,9 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <div class="field">
         <button type="submit" class="botonIniciar">Registrarse</button>
-      </div>
-      <div class="signup-link">
-        <a href="../index.php">Iniciar sesión</a>
       </div>
       <?php if (!empty($mensaje)) echo "<p>$mensaje</p>"; ?>
     </form>

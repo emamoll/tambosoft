@@ -4,24 +4,24 @@ require_once __DIR__ . '../../DAOS/usuarioDAO.php';
 
 class UsuarioController
 {
-  private $usuarioDao;
+  private $usuarioDAO;
 
   public function __construct()
   {
-    $this->usuarioDao = new UsuarioDAO();
+    $this->usuarioDAO = new UsuarioDAO();
   }
 
   public function registrarUsuario($username, $email, $password, $rol_id, $token)
   {
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
-    $existeUsername = $this->usuarioDao->getUsuarioByUsername($username);
-    $existeEmail = $this->usuarioDao->getUsuarioByEmail($email);
+    $existeUsername = $this->usuarioDAO->getUsuarioByUsername($username);
+    $existeEmail = $this->usuarioDAO->getUsuarioByEmail($email);
 
     if (!$existeUsername || !$existeEmail) {
-      $this->usuarioDao->verificarRoles();
+      $this->usuarioDAO->verificarRoles();
       $usuario = new Usuario(null, $username, $email, $hash, $rol_id, $token);
-      return $this->usuarioDao->registrarUsuario($usuario);
+      return $this->usuarioDAO->registrarUsuario($usuario);
     }
 
     return null;
@@ -29,7 +29,7 @@ class UsuarioController
 
   public function loginUsuario($username, $password)
   {
-    $usuario = $this->usuarioDao->getUsuarioByUsername($username);
+    $usuario = $this->usuarioDAO->getUsuarioByUsername($username);
 
     if ($usuario && password_verify($password, $usuario->getPassword())) {
       // Generar token
@@ -37,7 +37,7 @@ class UsuarioController
       $usuario->setToken($token);
 
       // Guardar token en base de datos
-      $this->usuarioDao->actualizarToken($usuario->getId(), $token);
+      $this->usuarioDAO->actualizarToken($usuario->getId(), $token);
 
       // Guardar token en la sesión
       $_SESSION['token'] = $token;
@@ -50,6 +50,6 @@ class UsuarioController
 
   public function getUsuarioPorToken($token)
   {
-    return $this->usuarioDao->getUsuarioPorToken($token);
+    return $this->usuarioDAO->getUsuarioPorToken($token);
   }
 }

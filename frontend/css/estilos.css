@@ -446,6 +446,13 @@ li {
   z-index: 1;
 }
 
+.seccionPotrero{
+  text-align: center;
+  margin-top: 600px;
+  position: relative;
+  z-index: 1;
+}
+
 table {
   width: 80%;
   margin-top: 15px;

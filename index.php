@@ -12,6 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $usuario = $controller->loginUsuario($_POST['username'], $_POST['password']);
 
   if ($usuario) {
+    $_SESSION['username'] = $usuario->getUsername();
+    $_SESSION['rol_id'] = $usuario->getRol_id();
     $_SESSION['token'] = $usuario->getToken();
 
     if ($usuario->getRol_id() == 1) {
@@ -25,24 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 
-
-// if (isset($_POST['username']) && isset($_POST['password'])) {
-//   $usuarioDao = new UsuarioDAO();
-//   $usuario = $usuarioDao->getUsuarioByUsername($_POST['username']);
-//   if ($usuario && password_verify($_POST['password'], $usuario->getPassword())) {
-//     $_SESSION['username'] = $usuario->getUsername();
-//     $_SESSION['rol_id'] = $usuario->getRol_id();
-//     if($usuario->getRol_id() == 1){
-//       header('Location: frontend/vistas/usuario/adminHome.php');
-//     }elseif($usuario->getRol_id() == 2){
-//       header('Location: frontend/vistas/usuario/usuarioHome.php');
-//     }else{
-//       echo ("Usted no esta autorizado");
-//     }
-//   } else {
-//     $error = "Usuario y/o contraseña incorrectos";
-//   }
-// }
 ?>
 
 <!DOCTYPE html>
